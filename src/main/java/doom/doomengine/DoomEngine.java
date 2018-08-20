@@ -5,12 +5,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -32,7 +36,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @SpringBootApplication
 @RestController
 public class DoomEngine {
-
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/shootDemon").allowedOrigins("http://localhost:8080");
+            }
+        };
+    }
     private static Logger logger = LoggerFactory.getLogger(DoomEngine.class);
 
     @Value("${DOOM_STATE_SERVICE_URL}")
