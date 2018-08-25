@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,20 +32,14 @@ import static java.lang.Math.max;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.summarizingInt;
 import static java.util.stream.IntStream.range;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @SpringBootApplication
 @RestController
+@CrossOrigin(origins = "*")
 public class DoomEngine {
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/shootDemon").allowedOrigins("http://localhost:8080");
-            }
-        };
-    }
+
     private static Logger logger = LoggerFactory.getLogger(DoomEngine.class);
 
     @Value("${DOOM_STATE_SERVICE_URL}")
@@ -88,6 +83,11 @@ public class DoomEngine {
             default:
                 throw new IllegalArgumentException("Unknown weapon: '" + request.getWeapon() + "'");
         }
+    }
+
+    @RequestMapping(value = "/test", method = GET)
+    public String test() {
+        return "test";
     }
 
     private void shootDemon(int id, int damage, int ammo) throws IOException {
