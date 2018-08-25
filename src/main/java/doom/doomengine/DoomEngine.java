@@ -51,7 +51,7 @@ public class DoomEngine {
     private RestTemplate stateService;
 
     //@Scheduled(fixedRate = 5000)
-    public void moveDemons() throws IOException {
+    public void moveDemons() {
         DoomState state = getState();
         List<Demon> demons = new ArrayList<>(state.getDemons().values());
 
@@ -90,7 +90,7 @@ public class DoomEngine {
         return "test";
     }
 
-    private void shootDemon(int id, int damage, int ammo) throws IOException {
+    private void shootDemon(int id, int damage, int ammo) {
         DoomState state = getState();
         Demon demon = state.getDemons().get(id);
         Player player = state.getPlayer();
@@ -104,7 +104,7 @@ public class DoomEngine {
         }
     }
 
-    private DoomState getState() throws IOException {
+    private DoomState getState() {
         return stateService.getForObject(doomStateServiceUrl + "/state", DoomState.class);
     }
 
