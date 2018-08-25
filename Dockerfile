@@ -1,6 +1,20 @@
+FROM maven:3 AS build
+
+WORKDIR /build
+
+COPY pom.xml .
+RUN mkdir -p src/main/java
+COPY FakeMain.java src/main/java
+
+RUN mvn package
+
+COPY src ./src
+
+RUN mvn package
+
 FROM openjdk:10.0.1-10-jre
 
 WORKDIR /app
-COPY target/doom-engine.jar /app
+COPY --from=build /build/target/doom-engine.jar .
 
-CMD java -jar /app/doom-engine.jar
+CMD java -jar doom-engine.jar
