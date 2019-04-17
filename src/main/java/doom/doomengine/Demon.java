@@ -16,7 +16,6 @@ public class Demon {
         this.id = id;
         this.health = health;
         this.type = type;
-        System.out.println("test");
     }
 
     public int getId() {
